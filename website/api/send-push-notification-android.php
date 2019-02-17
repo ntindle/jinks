@@ -1,15 +1,17 @@
 <?php
-require('../config.php');
+require_once('../config.php');
 
-function send_push_notification_android($receiver_id, $message) {
+function send_push_notification_android($receiver_id, $message, $data = array()) {
 	$url = 'https://fcm.googleapis.com/fcm/send';
+	
+	$data['body'] = $message;
+	$data['title'] = "Transaction Verification";
+	$data['icon'] = "R.mipmap.rounded";
+	
 	$post = array(
-			'to' => $receiver_id,
-			'notification' => array(
-					"body" => $message,
-					"title" => "Title",
-					"icon" => "myicon"
-			)
+		'to' => $receiver_id,
+		'notification' => $data,
+		'data' => $data
 	);
 	
 	$post = json_encode($post);
@@ -27,15 +29,7 @@ function send_push_notification_android($receiver_id, $message) {
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
 	
 	$result = curl_exec($ch);
-	
 	curl_close($ch);
 	
 	return $result;
 }
-
-var_dump(
-	send_push_notification_android(
-		ANDROID_DEVICE_ID,
-		'WTF IS NICK TALKING ABOUT'
-	)
-);

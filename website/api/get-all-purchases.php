@@ -26,11 +26,15 @@ $purchases_list = array();
 
 $purchases = get_all_purchases();
 foreach ($purchases as $purchase) {
+	$q = $db->query('SELECT status FROM transaction_log WHERE transaction_id = "' . $db->real_escape_string($purchase->_id) . '"');
+	$r = $q->fetch_array(MYSQLI_NUM);
+	$status = $r[0];
 	$purchases_list[] = array(
 		'id' => $purchase->_id,
 		'amt' => $purchase->amount,
 		'date' => $purchase->purchase_date,
 		'desc' => $purchase->description,
+		'status' => $status,
 		'merchant' => get_merchant($purchase->merchant_id)
 	);
 }
