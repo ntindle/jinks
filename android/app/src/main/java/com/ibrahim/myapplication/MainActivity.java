@@ -7,12 +7,16 @@ import android.media.MediaRecorder;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -36,7 +40,6 @@ public class MainActivity extends AppCompatActivity
         playBtn = findViewById(R.id.playBtn);
         recordBtn = findViewById(R.id.recordBtn);
         stopRecordBtn = findViewById(R.id.stopRecordBtn);
-
 
 
 
@@ -135,4 +138,6 @@ public class MainActivity extends AppCompatActivity
         int record_audio_result = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
         return write_external_storage_result== PackageManager.PERMISSION_GRANTED && record_audio_result==PackageManager.PERMISSION_GRANTED;
     }
+
+
 }
