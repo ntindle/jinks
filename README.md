@@ -1,7 +1,7 @@
 # JINKS
 ![Jinks Logo](branding/logo(Dark).png)
 
-JINKS is an in-development technology that leverages an android app, PHP, cURL, and a REST API in order to verify if the user is in a stable state of mind.
+JINKS is an in-development technology that leverages an android app, PHP, cURL, Node.JS, Python and a REST API in order to verify if the user is in a stable state of mind.
 
 ## Problems it solves 
 Since online banking has been introduced, it has always been very difficult for banks to correctly determine which transactions are legitimate and which are fraudulent. Customers hate to be inconvenienced with multiple layers of authentication, while banks often have to consider whether largely inconveniencing a customer is worth the hassle for extra account security. In fraudulent transactions over the internet, banks often only check accounts for fraudulent transactions when an account is deemed as engaging in risky behavior across several transactions. Unfortunately, unwanted purchases occur more often than can be detected from banks and account holders alike. 
