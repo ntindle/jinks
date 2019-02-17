@@ -1,5 +1,6 @@
 <?php
 require('../config.php');
+header('Content-Type: application/json');
 
 function get_all_merchants() {
 	$ch = curl_init();
@@ -20,4 +21,9 @@ function get_all_merchants() {
 	return $result;
 }
 
-var_dump(get_all_merchants());
+$merchants = get_all_merchants();
+foreach ($merchants as $merchant) {
+	if (!empty($merchant->address->city) && !empty($merchant->address->state)) {
+		echo $merchant->name, ', ', $merchant->address->city, ', ', $merchant->address->state . PHP_EOL;
+	}
+}

@@ -1,3 +1,5 @@
+Options -Indexes
+
 RewriteEngine on
 
 RewriteCond %{HTTP_HOST} !^api.jinks.ml [NC]

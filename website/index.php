@@ -34,24 +34,60 @@
     <![endif]-->
 	
 	<style>
-	textarea#description {
-		margin-bottom: 10px;
-		background-color: #fff;
-		padding-left: 20px;
-		padding: 16px 16px 25px 16px;
-		border-radius: 0;
-		border: 2px solid #dedede;
-		margin-bottom: 16px;
-		color: #999;
-		height: 80px;
-	}
+		textarea#description {
+			margin-bottom: 10px;
+			background-color: #fff;
+			padding-left: 20px;
+			padding: 16px 16px 25px 16px;
+			border-radius: 0;
+			border: 2px solid #dedede;
+			margin-bottom: 16px;
+			color: #999;
+			height: 80px;
+		}
+		select#merchant {
+			margin-bottom: 10px;
+			background-color: #fff;
+			padding-left: 20px;
+			padding: 15px;
+			border-radius: 0;
+			border: 2px solid #dedede;
+			margin-bottom: 16px;
+			color: #999;
+			    height: 55px;
+		}
+		.split-container {
+			display: flex;
+		}
+		.split {
+			flex: 1;
+		}
+		.split-left {
+			margin-left: 50px;
+		}
+		.split-right {
+			margin-left: 25px;
+			border-left: 2px solid #e2e2e2;
+			padding: 20px 40px 25px 40px;
+		}
+		.transactions {
+			width: 100%;
+			height: 100%;
+			overflow-y: scroll;
+		}
+		.authenty.signin-main input {
+			transition: all 1s ease-in-out;
+		}
+		.authenty.signin-main input.format-error {
+			border-color: #ea1515;
+		}
 	</style>
 </head>
 
 <body>
     <section id="authenty_preview">
         <section id="signin_main" class="authenty signin-main">
-            <div class="section-content">
+            <div class="section-content" style="min-height: 100vh;">
                 <div class="wrap">
                     <div class="container">
                         <div class="row">
@@ -63,17 +99,33 @@
 									<h6>Saving you money, when you need it most</h6>
                                     <div class="overlay"></div>
                                 </div>
-                                <div id="form_1">
-                                    <div class="form-main">
-                                        <div class="form-group">
-                                            <input type="text" id="amount" class="form-control" placeholder="Amount" required="required">
-											<input type="text" id="vendor" class="form-control" placeholder="Merchant" required="required">
-											<input style="background-color: #e4e4e4;" type="text" id="date" class="form-control" placeholder="Date" value="<?php echo date('Y-m-d'); ?>" required="required" disabled="disabled"/>
-											<textarea style="margin-bottom: 10px;" id="description" class="form-control" placeholder="Description" required="required"></textarea>
-                                            <button id="signIn_1" type="submit" class="btn btn-block signin">Test Transaction</button>
-                                        </div>
-                                    </div>
-                                </div>
+								<div id="form_1" class="split-container">
+									<div class="split split-left">
+										<div class="form-main">
+											<div class="form-group">
+												<input type="text" id="amount" class="form-control" placeholder="Amount" required="required">
+												<select class="form-control" id="merchant" placeholder="Merchant">
+												  <option>Choose a merchant...</option>
+												  <option value="volvo">Volvo</option>
+												  <option value="saab">Saab</option>
+												  <option value="mercedes">Mercedes</option>
+												  <option value="audi">Audi</option>
+												</select>
+												<input style="background-color: #e4e4e4;" type="text" id="date" class="form-control" placeholder="Date" value="<?php echo date('Y-m-d'); ?>" required="required" disabled="disabled"/>
+												<textarea style="margin-bottom: 10px;" id="description" class="form-control" placeholder="Description" required="required"></textarea>
+												<button id="signIn_1" type="submit" class="btn btn-block signin">Test Transaction</button>
+											</div>
+										</div>
+									</div><!-- no whitespace in between inline elements
+								 --><div class="split split-right">
+										<h4>Purchases</h4>
+										<div class="transactions">
+											<div class="transaction-list">
+												Loading...
+											</div>
+										</div>
+									</div>
+								</div>
                             </div>
                         </div>
                     </div>
@@ -103,6 +155,42 @@
     <script>
         (function($) {
 
+			$(document).ready(function() {
+				$.get('/api/get-all-purchases', function(data) {
+					console.log(data);
+				});
+			});
+			
+			$('#signIn_1').click(function (e) {  
+	   
+				var amount = $.trim($('#amount').val());
+				var merchant = $.trim($('#merchant').val());
+				var date = $.trim($('#date').val());
+				var description = $.trim($('#description').val());
+
+				do {
+					if (amount === '' || isNaN(amount)) {
+						$('#form_1 .fa-user').removeClass('success').addClass('fail');
+						$('#form_1').addClass('fail');
+						$('#amount').addClass('format-error');
+					} else if (merchant === '') {
+						
+					} else {
+						$('#form_1 .fa-user').removeClass('fail').addClass('success');
+						$('#form_1').removeClass('fail').removeClass('animated');
+						return true;
+					}
+				} while (false);
+				setTimeout(function() {
+					$('#form_1').removeClass('fail');
+				}, 1000);
+				
+			});
+			
+			$("#amount, #merchant, #date, #description").on('focus', function(e) {
+				$(this).removeClass('format-error');
+			});
+			
             // get full window size
             $(window).on('load resize', function() {
                 var w = $(window).width();
