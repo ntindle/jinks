@@ -3,10 +3,10 @@
 
 JINKS is an in-development technology that leverages an android app, PHP, cURL, and a REST API in order to verify if the user is in a stable state of mind.
 
-## What problem does it solve? 
+## Problems it solves 
 Since online banking has been introduced, it has always been very difficult for banks to correctly determine which transactions are legitimate and which are fraudulent. Customers hate to be inconvenienced with multiple layers of authentication, while banks often have to consider whether largely inconveniencing a customer is worth the hassle for extra account security. In fraudulent transactions over the internet, banks often only check accounts for fraudulent transactions when an account is deemed as engaging in risky behavior across several transactions. Unfortunately, unwanted purchases occur more often than can be detected from banks and account holders alike. 
 
-Many people 
+Bank account holders often struggle with authenticating their own transactions due to impulse buys and irrational and reckless behavior. With our emotional stability analytical technology, a transaction will decline when buyers are not in the right state of mind. Customers can now be certain their transactions are valid due to complete conscientiousness during purchases.
 
 ## How it works
 JINKS works by awaiting a transaction and sending the verification to the Android app. When the user opens the notification from JINKS, they have to repeat aloud a statement that is psuedorandomlly generated. Their spoken audio is recorded and then transmitted back to our server and passed through an emotion recognization API. The data that comes out of the API is then used to approve or deny the user's purchase.
