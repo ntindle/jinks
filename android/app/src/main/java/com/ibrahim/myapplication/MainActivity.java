@@ -1,11 +1,15 @@
 package com.ibrahim.myapplication;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
+import android.os.storage.StorageManager;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -13,17 +17,40 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
+import java.net.URL;
 import java.util.Locale;
 import java.util.UUID;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import static com.google.firebase.iid.FirebaseInstanceId.getInstance;
 
@@ -34,9 +61,73 @@ public class MainActivity extends AppCompatActivity
     MediaRecorder mediaRecorder;
     MediaPlayer mediaPlayer;
     String outputFile = null;
+    File file;
     final int REQUEST_PREMISSION_CODE = 1000;
     private TextToSpeech myTTS;
 
+
+    public class ATask extends AsyncTask<String, Void, String>
+    {
+
+        @Override
+        protected String doInBackground(String... urls) {
+
+            try {
+                URL url = new URL("https://api.jinks.ml/challenge-result");
+                HttpsURLConnection client = null;
+
+                try {
+                    client = (HttpsURLConnection) url.openConnection();
+                    client.setRequestMethod("POST");
+                    //client.setRequestProperty("Key", "Value");
+                    client.setDoOutput(true);
+                    //client.connect();
+
+                    DataOutputStream dStream = new DataOutputStream(client.getOutputStream());
+                    file = new File(outputFile);
+                    byte[] f = new byte[(int) file.length()];
+                    DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file));
+                    dataInputStream.readFully(f);
+                    dataInputStream.close();
+                    String base64 = Base64.encodeToString(f, Base64.DEFAULT);
+
+                    dStream.writeBytes(base64);
+                    dStream.flush();
+                    dStream.close();
+
+                    InputStream in = client.getInputStream();
+
+                    InputStreamReader isw = new InputStreamReader(in);
+
+                    int data = isw.read();
+                    String res = "";
+                    while (data != -1) {
+                        char current = (char) data;
+                        res += current;
+                        data = isw.read();
+                    }
+
+                    Log.i("Result", res);
+
+
+                } finally {
+                    if(client != null) // Make sure the connection is not null.
+                        client.disconnect();
+                }
+
+            }catch(MalformedURLException error) {
+                error.getMessage();
+            } catch(SocketTimeoutException error) {
+                error.getMessage();
+            } catch (IOException error) {
+                error.getMessage();
+            }
+
+
+            return "test2";
+
+        }
+    }
 
 
     @Override
@@ -45,6 +136,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        TextView outText = (TextView) findViewById(R.id.textView2);
+        outText.setMovementMethod(new ScrollingMovementMethod());
         playBtn = findViewById(R.id.playBtn);
         recordBtn = findViewById(R.id.recordBtn);
         stopRecordBtn = findViewById(R.id.stopRecordBtn);
@@ -133,14 +227,32 @@ public class MainActivity extends AppCompatActivity
         mediaRecorder = null;
         stopRecordBtn.setEnabled(false);
         playBtn.setEnabled(true);
-        Toast.makeText(this, "Audio Recorded", Toast.LENGTH_SHORT).show();
+
+
+        ATask task = new ATask();
+        String result = null;
+        try {
+            result = task.execute("https://api.jinks.ml/challenge-result").get();
+        } catch (Exception e) {
+            e.getMessage();
+        }
+
+
+
+        Log.i("Result",result);
+        Toast.makeText(this, "Thank you...", Toast.LENGTH_SHORT).show();
+        finish();
+
     }
+
+
+
     public void play(View view) throws IOException
     {
-        MediaPlayer m = new MediaPlayer();
-        m.setDataSource(outputFile);
-        m.prepare();
-        m.start();
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setDataSource(outputFile);
+        mediaPlayer.prepare();
+        mediaPlayer.start();
         Toast.makeText(this, "Playing Audio", Toast.LENGTH_SHORT).show();
 
 
@@ -195,4 +307,6 @@ public class MainActivity extends AppCompatActivity
         super.onPause();
         myTTS.shutdown();
     }
+
+
 }
