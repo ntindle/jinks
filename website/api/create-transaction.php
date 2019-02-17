@@ -1,5 +1,6 @@
 <?php
 require('../config.php');
+header('Content-Type: application/json');
 
 function create_transaction($merchant_id, $amount, $description, $date) {
 	$ch = curl_init();
@@ -30,4 +31,9 @@ function create_transaction($merchant_id, $amount, $description, $date) {
 	return $result;
 }
 
-var_dump(create_transaction('5c688e486759394351bec0e7', '110', 'Nick smells like...', '2019-02-16'));
+$amount = $_POST['amount'];
+$merchant = $_POST['merchant'];
+$date = $_POST['date'];
+$description = $_POST['description'];
+
+echo json_encode(create_transaction($merchant, $amount, $description, $date));

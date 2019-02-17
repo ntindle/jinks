@@ -22,8 +22,13 @@ function get_all_merchants() {
 }
 
 $merchants = get_all_merchants();
+
+$formatted_merchant_list = array();
+
 foreach ($merchants as $merchant) {
 	if (!empty($merchant->address->city) && !empty($merchant->address->state)) {
-		echo $merchant->name, ', ', $merchant->address->city, ', ', $merchant->address->state . PHP_EOL;
+		$formatted_merchant_list[] = array($merchant->_id, $merchant->name . ', ' . $merchant->address->city . ', ' . $merchant->address->state);
 	}
 }
+
+echo json_encode($formatted_merchant_list);
