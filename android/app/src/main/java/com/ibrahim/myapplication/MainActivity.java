@@ -2,6 +2,7 @@ package com.ibrahim.myapplication;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -15,11 +16,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -57,7 +60,7 @@ import static com.google.firebase.iid.FirebaseInstanceId.getInstance;
 public class MainActivity extends AppCompatActivity
 {
 
-    Button recordBtn, stopRecordBtn, playBtn, repeatBtn;
+    Button recordBtn, stopRecordBtn, repeatBtn;
     MediaRecorder mediaRecorder;
     MediaPlayer mediaPlayer;
     String outputFile = null;
@@ -135,11 +138,15 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        ActionBar actionBar  = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
+        repeatBtn = findViewById(R.id.repeatBtn);
 
         TextView outText = (TextView) findViewById(R.id.textView2);
         outText.setMovementMethod(new ScrollingMovementMethod());
-        playBtn = findViewById(R.id.playBtn);
+
         recordBtn = findViewById(R.id.recordBtn);
         stopRecordBtn = findViewById(R.id.stopRecordBtn);
 
@@ -152,7 +159,6 @@ public class MainActivity extends AppCompatActivity
         if (checkPermissionFromDevice())
         {
             stopRecordBtn.setEnabled(false);
-            playBtn.setEnabled(false);
             outputFile = Environment.getExternalStorageDirectory().getAbsolutePath()
                     + "/myrec.3gp";
             mediaRecorder = new MediaRecorder();
@@ -226,7 +232,6 @@ public class MainActivity extends AppCompatActivity
         mediaRecorder.release();
         mediaRecorder = null;
         stopRecordBtn.setEnabled(false);
-        playBtn.setEnabled(true);
 
 
         ATask task = new ATask();
@@ -247,16 +252,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-    public void play(View view) throws IOException
-    {
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setDataSource(outputFile);
-        mediaPlayer.prepare();
-        mediaPlayer.start();
-        Toast.makeText(this, "Playing Audio", Toast.LENGTH_SHORT).show();
 
-
-    }
     public void repeatBtn(View view)
     {
         speak("Please read the message that's on the website");
@@ -308,5 +304,16 @@ public class MainActivity extends AppCompatActivity
         myTTS.shutdown();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; goto parent activity.
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 }
