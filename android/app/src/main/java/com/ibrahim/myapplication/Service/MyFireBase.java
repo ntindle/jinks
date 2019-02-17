@@ -3,7 +3,9 @@ package com.ibrahim.myapplication.Service;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
@@ -13,6 +15,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.ibrahim.myapplication.MainActivity;
 import com.ibrahim.myapplication.R;
 
 import java.util.Map;
@@ -37,11 +40,16 @@ public class MyFireBase extends FirebaseMessagingService
         if (remoteMessage.getData().isEmpty())
         {
             showNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+
         }
         else
         {
             showNotification(remoteMessage.getData());
         }
+    }
+    public void openActivity()
+    {
+
     }
 
     private void showNotification(Map<String, String> data)
@@ -73,6 +81,9 @@ public class MyFireBase extends FirebaseMessagingService
                 .setContentInfo("info");
 
         notificationManager.notify(new Random().nextInt(), notificationBuilder.build());
+
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, MainActivity.class), 0);
 
 
     }
@@ -106,7 +117,11 @@ public class MyFireBase extends FirebaseMessagingService
 
         notificationManager.notify(new Random().nextInt(), notificationBuilder.build());
 
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, MainActivity.class), 0);
+
     }
+
 
     @Override
     public void onNewToken(String s)
