@@ -2,6 +2,7 @@ package com.ibrahim.myapplication;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
@@ -32,6 +33,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -42,6 +44,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -50,21 +53,31 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.UUID;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import static com.google.firebase.iid.FirebaseInstanceId.getInstance;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.File;
+import android.widget.*;
 
 public class MainActivity extends AppCompatActivity
 {
 
+
     Button recordBtn, stopRecordBtn, repeatBtn;
+    TextView test;
     MediaRecorder mediaRecorder;
     MediaPlayer mediaPlayer;
     String outputFile = null;
+    String id="";
+    String temp;
     File file;
+    String file1 = "myNewFile";
     final int REQUEST_PREMISSION_CODE = 1000;
     private TextToSpeech myTTS;
 
@@ -94,7 +107,7 @@ public class MainActivity extends AppCompatActivity
                     dataInputStream.close();
                     String base64 = Base64.encodeToString(f, Base64.DEFAULT);
 
-                    dStream.writeBytes(base64);
+                    dStream.writeBytes(base64 + " " + id);
                     dStream.flush();
                     dStream.close();
 
@@ -142,7 +155,42 @@ public class MainActivity extends AppCompatActivity
         ActionBar actionBar  = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            id = extras.get("id").toString();
+            //String value = extras.getString("special_id");
+            Log.d("idlog: ","not null");
+            //The key argument here must match that used in the other activity
+        } else {
+            Log.d("idlog2: ","was null");
+        }
+
+        /*
+        test = findViewById(R.id.test);
+        try {
+            FileInputStream fIn = openFileInput(file1);
+            //File fIn = new File(getFilesDir(), file);
+            int c;
+            temp = "";
+
+            while ((c = fIn.read())!= -1)
+            {
+                temp = temp + Character.toString((char)c);
+            }
+            Toast.makeText(getBaseContext(), "File Read Successfully", Toast.LENGTH_LONG).show();
+
+            id = temp;
+            test.setText("hey: " + id);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        test = findViewById(R.id.test);
+        */
+        //test.setText("hey");
         repeatBtn = findViewById(R.id.repeatBtn);
+
 
 
         recordBtn = findViewById(R.id.recordBtn);
@@ -173,6 +221,7 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
+
 
     private void initializeTextToSpeech()
     {
