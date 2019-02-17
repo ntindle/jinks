@@ -134,19 +134,22 @@
 	</section>
 	
 	<!-- Modal -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal fade" id="challenge-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 	  <div class="modal-dialog" role="document">
 		<div class="modal-content">
 		  <div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title" id="myModalLabel">Modal title</h4>
+			<h4 class="modal-title" id="myModalLabel">Transaction Verification</h4>
 		  </div>
-		  <div class="modal-body">
-			...
+		  <div class="modal-body ver">
+			  <p><strong>Please open the notification in your app and speak the below string to verify yourself</strong></p>
+			  <pre id="challenge-text" style="font-size: 20px;"></pre>
+		  </div>
+			<div class="modal-body done" style="display: none;">
+			  <h2>Your are feeling:</h2>
+			  <pre id="challenge-done" style="font-size: 35px;"></pre>
 		  </div>
 		  <div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			<button type="button" class="btn btn-primary">Save changes</button>
 		  </div>
 		</div>
 	  </div>
@@ -228,6 +231,17 @@
 						console.log('updating', data[1][1]);
 						$("#tid-" + data[1][1] + " > i").remove();
 						$("#tid-" + data[1][1]).prepend(status_icon[data[1][0]]);
+						$("#challenge-done").text(atob(data[1][2]));
+						if (data[1][0] == 2) { // bad
+							$("#challenge-done").css('color', 'red');
+						} else { // good (3)
+							$("#challenge-done").css('color', 'green');
+						}
+						$(".modal-body.ver").slideUp();
+						$(".modal-body.done").slideDown();
+						setTimeout(function() {
+							$("#challenge-modal").modal('hide');
+						}, 2500);
 					}
 				} else {
 					console.log("WebSocket message: " + evt.data);
@@ -257,10 +271,18 @@
 						$('#description').addClass('format-error');
 					} else {
 						// success
-						$(".transaction-list").prepend('<p><img style="width: 30px;" src="/img/spin.gif"/></p>');
+						//$(".transaction-list").prepend('<p><img style="width: 30px;" src="/img/spin.gif"/></p>');
+						$(".transaction-list").prepend('<p>' + status_icon[0] + ' $<strong>' + amount + '</strong> @ ' + $('#merchant').children("option:selected").text() + '</p>');
 						
 						$.post('/api/create-transaction', {amount: amount, merchant: merchant, date: date, description: description}, function(data) {
 							console.log(data, $('#merchant').children("option:selected").text());
+							
+							if (data.status == 1) {
+								$("#challenge-text").html(data.words);
+								$(".modal-body.ver").css('display', 'block');
+								$(".modal-body.done").css('display', 'none');
+								$("#challenge-modal").modal('show');
+							}
 							
 							$(".transaction-list > p:first-of-type").html(status_icon[data.status] + ' $<strong>' + amount + '</strong> @ ' + $('#merchant').children("option:selected").text()).attr('id', 'tid-' + data.objectCreated._id);
 							//$('#amount').val('');

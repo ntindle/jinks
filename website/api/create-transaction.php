@@ -56,7 +56,7 @@ $transaction_id = $transaction->objectCreated->_id;
 $words = "";
 
 if (floatval($amount) > 100) {
-	$transaction->status = 0;
+	$transaction->status = 1;
 
 	$merchant = get_merchant($merchant);
 
@@ -65,7 +65,7 @@ if (floatval($amount) > 100) {
 		'Check transaction: $' . $amount . ' @ ' . $merchant->name,
 		array('id' => $transaction_id)
 	);
-	$words = get_words($dictionary, 5);
+	$words = get_words(5);
 } else {
 	$transaction->status = 3;
 }
