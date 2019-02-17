@@ -144,8 +144,6 @@ public class MainActivity extends AppCompatActivity
 
         repeatBtn = findViewById(R.id.repeatBtn);
 
-        TextView outText = (TextView) findViewById(R.id.textView2);
-        outText.setMovementMethod(new ScrollingMovementMethod());
 
         recordBtn = findViewById(R.id.recordBtn);
         stopRecordBtn = findViewById(R.id.stopRecordBtn);
