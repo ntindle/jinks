@@ -1,4 +1,5 @@
 # JINKS
 
-Jinks is an in-development technology that leverages <<FRAMEOWRKS>> and <<TECHNOLOGU>> in order to verify the user's Identity and state of mind. 
-Jinks works by sending a random phrase and having the user repeat it. We then analyze the data and parse it for emotional stability. Jinks then uses that to either verify or deny a transaction. 
+JINKS is an in-development technology that leverages an android app, PHP, cURL, and and a REST API in order to verify the user is in a stable state of mind. 
+JINKS works by awaiting a transaction and sending the verification to the Android app. When the user opens the notification from JINKS, they have to repeat aloud a statement that is psuedorandomlly generated. Their spoken audio is recorded and then transmitted back to our server and passed through a emotion recognization API. The data that comes out of the API is then used to approve or deny the user's purchase.
+
