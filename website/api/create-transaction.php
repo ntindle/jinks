@@ -7,7 +7,7 @@ function create_transaction($merchant_id, $amount, $description, $date) {
 	$post = array('merchant_id' => $merchant_id,
 				  'medium' => 'balance',  
 				  'purchase_date' => $date,//'2019-02-17',
-				  'amount' => intval($amount),
+				  'amount' => floatval($amount),
 				  'status' => 'pending',
 				  'description' => $description
 				 );

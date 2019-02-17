@@ -1,5 +1,7 @@
 <?php
-require('../config.php');
+require_once('../config.php');
+require('get-merchant.php');
+header('Content-Type: application/json');
 
 function get_all_purchases() {
 	$ch = curl_init();
@@ -16,4 +18,17 @@ function get_all_purchases() {
 	$result = curl_exec($ch);
 	$result = json_decode($result);
 	curl_close ($ch);
+	
+	return $result;
+}
+
+$purchases = get_all_purchases();
+foreach ($purchases as $purchase) {
+	var_dump(array(
+		'id' => $purchase->_id,
+		'amt' => $purchase->amount,
+		'date' => $purchase->purchase_date,
+		'desc' => $purchase->description,
+		'merchant' => get_merchant($purchase->merchant_id)
+	));
 }
