@@ -8,6 +8,8 @@ Since online banking has been introduced, it has always been very difficult for 
 
 Bank account holders often struggle with authenticating their own transactions due to impulse buys and irrational and reckless behavior. With our emotional stability analytical technology, a transaction will decline when buyers are not in the right state of mind. Customers can now be certain their transactions are valid due to complete conscientiousness during purchases.
 
+The same software without the emotion matching could be used to verify any risky purchases easily and quickly as well. 
+
 ## How it works
 JINKS works by awaiting a transaction and sending the verification to the Android app. When the user opens the notification from JINKS, they have to repeat aloud a statement that is psuedorandomlly generated. Their spoken audio is recorded and then transmitted back to our server and passed through an emotion recognization API. The data that comes out of the API is then used to approve or deny the user's purchase.
 
