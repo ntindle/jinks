@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">JINKS</string>
+    <string name="repeat_the_phrase">repeat the phrase</string>
+    <string name="record">RECORD</string>
+    <string name="stop">STOP</string>
+    <string name="hit_record_and_read_the_message_that_s_on_the_website">Hit record and read the message that\'s on the website</string>
 </resources>

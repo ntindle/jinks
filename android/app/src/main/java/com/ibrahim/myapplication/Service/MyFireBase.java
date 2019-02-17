@@ -47,16 +47,15 @@ public class MyFireBase extends FirebaseMessagingService
             showNotification(remoteMessage.getData());
         }
     }
-    public void openActivity()
-    {
 
-    }
 
     private void showNotification(Map<String, String> data)
     {
         Log.d("Receved", "Receved");
         String title = data.get("title").toString();
         String body = data.get("body").toString();
+        Log.i("DATA: ", title);
+        Log.i("DATA: ", body);
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID = "com.ibrahim.test";
 
@@ -110,7 +109,7 @@ public class MyFireBase extends FirebaseMessagingService
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
         notificationBuilder.setAutoCancel(true).setDefaults(Notification.DEFAULT_ALL)
         .setWhen(System.currentTimeMillis())
-        .setSmallIcon(R.drawable.ic_notification).
+        .setSmallIcon(R.mipmap.rounded).
         setContentTitle(title)
         .setContentText(body)
         .setContentInfo("info");

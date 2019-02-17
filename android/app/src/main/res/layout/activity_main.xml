@@ -14,8 +14,9 @@
         android:layout_marginTop="100dp"
         android:background="@drawable/rounded_button"
         android:onClick="repeatBtn"
-        android:text="repeat the phrase"
+        android:text="@string/repeat_the_phrase"
         android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -26,10 +27,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="50dp"
-        android:background="@drawable/rounded_button"
+        android:background="@drawable/rounded_red"
         android:onClick="start"
-        android:text="RECORD"
+        android:text="@string/record"
         android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/repeatBtn" />
 
@@ -41,8 +43,9 @@
         android:layout_marginEnd="40dp"
         android:background="@drawable/rounded_button"
         android:onClick="stop"
-        android:text="STOP"
+        android:text="@string/stop"
         android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/repeatBtn" />
 
@@ -52,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:text="Hit record and read the message that's on the website"
+        android:text="@string/hit_record_and_read_the_message_that_s_on_the_website"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="24sp"
@@ -62,14 +65,12 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="141dp"
-        android:layout_height="126dp"
-        android:layout_marginStart="135dp"
-        android:layout_marginTop="68dp"
-        android:layout_marginEnd="135dp"
+        android:layout_width="239dp"
+        android:layout_height="201dp"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recordBtn"
-        app:srcCompat="@drawable/logo" />
+        app:srcCompat="@drawable/logotransparent" />
 
 </android.support.constraint.ConstraintLayout>
