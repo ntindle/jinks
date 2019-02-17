@@ -1,0 +1,1 @@
+ curl -X POST "https://proxy.api.deepaffects.com/audio/generic/api/v2/sync/recognise_emotion?apikey=RAoyXunLzBJaT3pdpN1pZsFvQRuiTEoS" -H 'content-type: application/json' -d @data.json
