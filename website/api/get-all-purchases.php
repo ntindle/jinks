@@ -22,13 +22,17 @@ function get_all_purchases() {
 	return $result;
 }
 
+$purchases_list = array();
+
 $purchases = get_all_purchases();
 foreach ($purchases as $purchase) {
-	var_dump(array(
+	$purchases_list[] = array(
 		'id' => $purchase->_id,
 		'amt' => $purchase->amount,
 		'date' => $purchase->purchase_date,
 		'desc' => $purchase->description,
 		'merchant' => get_merchant($purchase->merchant_id)
-	));
+	);
 }
+
+echo json_encode($purchases_list);

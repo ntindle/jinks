@@ -78,8 +78,10 @@
 		.authenty.signin-main input {
 			transition: all 1s ease-in-out;
 		}
-		.authenty.signin-main input.format-error {
-			border-color: #ea1515;
+		.authenty.signin-main input.format-error,
+		.authenty.signin-main select.format-error,
+		.authenty.signin-main textarea.format-error {
+			border-color: #ea1515 !important;
 		}
 	</style>
 </head>
@@ -104,13 +106,10 @@
 										<div class="form-main">
 											<div class="form-group">
 												<input type="text" id="amount" class="form-control" placeholder="Amount" required="required">
-												<select class="form-control" id="merchant" placeholder="Merchant">
-												  <option>Choose a merchant...</option>
-												  <option value="volvo">Volvo</option>
-												  <option value="saab">Saab</option>
-												  <option value="mercedes">Mercedes</option>
-												  <option value="audi">Audi</option>
+												<select style="background-color: #e4e4e4;" class="form-control" id="merchant" placeholder="Merchant" disabled="disabled">
+												  <option>Loading...</option>
 												</select>
+												<!--<img style="position: absolute;top: 147px;left: 641px;width: 50px;" src="https://thumbs.gfycat.com/NecessaryEvilGuillemot-max-1mb.gif"/>-->
 												<input style="background-color: #e4e4e4;" type="text" id="date" class="form-control" placeholder="Date" value="<?php echo date('Y-m-d'); ?>" required="required" disabled="disabled"/>
 												<textarea style="margin-bottom: 10px;" id="description" class="form-control" placeholder="Description" required="required"></textarea>
 												<button id="signIn_1" type="submit" class="btn btn-block signin">Test Transaction</button>
@@ -157,30 +156,55 @@
 
 			$(document).ready(function() {
 				$.get('/api/get-all-purchases', function(data) {
-					console.log(data);
+					$(".transaction-list").html('');
+					for (element in data) {
+						$(".transaction-list").prepend('<p>$' + data[element].amt + ' @ ' + data[element].merchant.name + '</p>');
+					}
+				});
+				$.get('/api/get-all-merchants', function(data) {
+					$("#merchant").html('<option>Choose a merchant...</option>').css('background', 'none').prop('disabled', false);
+					for (element in data) {
+						$("#merchant").append($("<option></option>")
+							.attr("value", data[element][0])
+							.text(data[element][1]));
+					}
 				});
 			});
 			
 			$('#signIn_1').click(function (e) {  
 	   
 				var amount = $.trim($('#amount').val());
-				var merchant = $.trim($('#merchant').val());
+				var merchant = $.trim($('#merchant').children("option:selected").attr("value"));
 				var date = $.trim($('#date').val());
 				var description = $.trim($('#description').val());
 
 				do {
 					if (amount === '' || isNaN(amount)) {
-						$('#form_1 .fa-user').removeClass('success').addClass('fail');
-						$('#form_1').addClass('fail');
 						$('#amount').addClass('format-error');
 					} else if (merchant === '') {
-						
+						$('#merchant').addClass('format-error');
+					} else if (date === '') {
+						$('#date').addClass('format-error');
+					} else if (description === '') {
+						$('#description').addClass('format-error');
 					} else {
-						$('#form_1 .fa-user').removeClass('fail').addClass('success');
-						$('#form_1').removeClass('fail').removeClass('animated');
+						// success
+						
+						$.post('/api/create-transaction', {amount: amount, merchant: merchant, date: date, description: description}, function(data) {
+							console.log(data);
+							$(".transaction-list").prepend('<p>$' + amount + ' @ ' + merchant[1].split(',')[0] + '</p>');
+							$('#amount').val('');
+							$('#merchant').val('');
+							$('#description').val('');
+						});
+						
 						return true;
 					}
 				} while (false);
+				
+				$('#form_1 .fa-user').removeClass('success').addClass('fail');
+				$('#form_1').addClass('fail');
+				
 				setTimeout(function() {
 					$('#form_1').removeClass('fail');
 				}, 1000);
