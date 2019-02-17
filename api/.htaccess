@@ -1,1 +1,10 @@
-Options -Indexes
+RewriteEngine on
+
+RewriteCond %{HTTP_HOST} !^api.jinks.ml [NC]
+RewriteRule ^(.*)$ https://api.jinks.ml/$1 [R=301,L]
+
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L,NE]
+
+RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+RewriteRule ^(([^/]+/)*[^.]+)$ /$1.php [L]
