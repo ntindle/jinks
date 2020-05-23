@@ -14,5 +14,5 @@ JINKS works by awaiting a transaction and sending the verification to the Androi
 ## Expected Outcomes
 If the user is in a normal range of moods (happy,tired, etc.), the mood will be confirmed, and the user’s transaction will be authenticated. If the user is in an irregular mood (sad, angry, etc.), the user’s transaction will be denied. If the user cannot pronounce the given sentence without slurring speech or stuttering, the purchase will be denied. This process will keep users from making irrational financial decisions while under the influence while quickly authenticating account activity as soon as it is pending on the account. Because the account it authenticated in seconds, this could eliminate the tedious process of account authentication without compromising security.
 
-## Extensability
+## Extensibility
 This could be improved with an addition of voice authentication to verify the user is an authorized user. Additonally, the same technology and backend could be used with voice assistants such as Google Assistant or Amazon Alexa. 
